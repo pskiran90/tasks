@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tasks/mainApp/reusables/sized_box.dart';
-import 'package:tasks/mainApp/screens/landingPage/landingscreen.dart';
+
+import '../landingPage/landingscreen.dart';
 import '../../reusables/colors.dart';
 import '../../reusables/loading_screen.dart';
 import '../../bloc/login_bloc.dart';
@@ -145,7 +146,7 @@ class _LoginState extends State<Login> {
                                       const SizedBox(height: 20),
                                       // sign in button
                                       SignInButton(
-                                        onPressed: passwordController.text.length < 10
+                                        onPressed: passwordController.text.length < 5
                                             ? null
                                             : () {
                                                 login(context);

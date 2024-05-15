@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tasks/mainApp/bloc/fetch_bloc.dart';
-import 'package:tasks/mainApp/models/data_model.dart';
 
-import '../../reusables/data_not_found.dart';
-import '../../reusables/loading_screen.dart';
-import 'landing_screen_widget.dart';
+import '../favScreen/fav_page.dart';
+import '../home/home_page.dart';
+import '../profile/profile_screen.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
@@ -15,40 +12,41 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> {
-  @override
-  void initState() {
-    context.read<FetchDataBloc>().add(FetchData());
-    super.initState();
-  }
+  int _selectedIndex = 0;
+  final List<Widget> _screens = [
+    const HomeScreen(),
+    const ProfileScreen(),
+    const FavoritesScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FetchDataBloc, FetchDataState>(
-      builder: (context, fdb) {
-        if (fdb is FetchDataProgress) {
-          return const LoadingScreen(message: "Loading");
-        }
-        return Scaffold(
-          body: fdb is FetchDataSuccess
-              ? ListView.builder(
-                  itemCount: fdb.dataList.length,
-                  itemBuilder: (context, index) {
-                    DataModel dataList = fdb.dataList[index];
-                    return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: PolicyFilesTile(
-                          dataFilesList: dataList,
-                          action: () {
-                            debugPrint((index + 1).toString());
-                            debugPrint(dataList.id.toString());
-                          },
-                        ));
-                  })
-              : const NotSelectedView(
-                  msg: "No data",
-                ),
-        );
-      },
+    return Scaffold(
+      body: _screens[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'Favorites',
+          ),
+        ],
+      ),
     );
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 }

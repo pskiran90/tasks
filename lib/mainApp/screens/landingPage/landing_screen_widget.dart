@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import '../../models/data_model.dart';
 import '../../reusables/colors.dart';
 
-class PolicyFilesTile extends StatelessWidget {
-  const PolicyFilesTile({
+class CustomeTile extends StatelessWidget {
+  const CustomeTile({
     super.key,
     required this.action,
     required this.dataFilesList,

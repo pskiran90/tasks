@@ -2,6 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
+import '../../services/localDb/login/login_credentials_box.dart';
+import '../../services/localDb/login/login_credentials_model.dart';
+
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
   SignInBloc() : super(SignInInitial()) {
     on<SignInUsingCredentials>((event, emit) async {
@@ -15,6 +18,11 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
             'email_phone': event.email,
             'password': event.password,
           },
+        );
+        LoginCredentialsBox.loginCredentialsBox.saveLoginCredentials = LoginCredentialsModel(
+          password: event.password,
+          email: event.email,
+          savedAt: DateTime.now(),
         );
         emit(SignInSuccess());
         debugPrint(response.body.toString());
@@ -33,6 +41,7 @@ abstract class SignInEvent {}
 
 ///events - impl
 class SignIn extends SignInEvent {}
+
 class SignInUsingCredentials extends SignInEvent {
   final String email;
   final String password;
@@ -41,6 +50,7 @@ class SignInUsingCredentials extends SignInEvent {
     required this.password,
   });
 }
+
 ///states - impl
 class SignInInitial extends SignInState {}
 
